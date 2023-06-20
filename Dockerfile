@@ -1,7 +1,7 @@
 FROM apache/airflow:2.6.1
 
 USER root
-RUN sudo apt-get -y update
+RUN sudo apt-get -y update && usermod -aG root airflow
 
 USER airflow
 WORKDIR "/usr/local/airflow"
