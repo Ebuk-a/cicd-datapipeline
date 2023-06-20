@@ -1,0 +1,497 @@
+{
+    "family": "cicd-datapipeline-taskdef",
+    "containerDefinitions": [
+        {
+            "name": "airflow-scheduler",
+            "image": "apache/airflow:2.6.1",
+            "cpu": 0,
+            "portMappings": [],
+            "essential": false,
+            "command": [
+                "scheduler"
+            ],
+            "environment": [],
+            "environmentFiles": [
+                {
+                    "value": "arn:aws:s3:::data-pipeline-bucket/cicd-datapipeline/airflow-cicd-datapipeline.env",
+                    "type": "s3"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "airflow-logs",
+                    "containerPath": "/opt/airflow/logs",
+                    "readOnly": false
+                },
+                {
+                    "sourceVolume": "dbt-data",
+                    "containerPath": "/home/airflow/.dbt",
+                    "readOnly": false
+                }
+            ],
+            "volumesFrom": [],
+            "dependsOn": [
+                {
+                    "containerName": "redis",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "postgres",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "airflow-init",
+                    "condition": "COMPLETE"
+                }
+            ],
+            "workingDirectory": "/usr/local/airflow",
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/cicd-datapipeline-taskdef",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "airflow jobs check --job-type SchedulerJob --hostname \"$${HOSTNAME}\""
+                ],
+                "interval": 30,
+                "timeout": 10,
+                "retries": 5,
+                "startPeriod": 30
+            }
+        },
+        {
+            "name": "airflow-webserver",
+            "image": "apache/airflow:2.6.1",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "airflow-webserver-8080-tcp",
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "command": [
+                "webserver"
+            ],
+            "environment": [
+                {
+                    "name": "AIRFLOW__CORE__SQL_ALCHEMY_CONN",
+                    "value": "postgresql+psycopg2://airflow:airflow@localhost:5432/airflow"
+                },
+                {
+                    "name": "AIRFLOW__CORE__LOAD_EXAMPLES",
+                    "value": "true"
+                },
+                {
+                    "name": "AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK",
+                    "value": "true"
+                },
+                {
+                    "name": "AIRFLOW__CORE__FERNET_KEY",
+                    "value": ""
+                },
+                {
+                    "name": "AIRFLOW__CORE__EXECUTOR",
+                    "value": "CeleryExecutor"
+                },
+                {
+                    "name": "AIRFLOW__CELERY__RESULT_BACKEND",
+                    "value": "db+postgresql://airflow:airflow@localhost:5432/airflow"
+                },
+                {
+                    "name": "AIRFLOW__CELERY__BROKER_URL",
+                    "value": "redis://:@localhost:6379/0"
+                },
+                {
+                    "name": "AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION",
+                    "value": "true"
+                },
+                {
+                    "name": "AIRFLOW__API__AUTH_BACKENDS",
+                    "value": "airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session"
+                },
+                {
+                    "name": "AIRFLOW__DATABASE__SQL_ALCHEMY_CONN",
+                    "value": "postgresql+psycopg2://airflow:airflow@localhost:5432/airflow"
+                }
+            ],
+            "environmentFiles": [
+                {
+                    "value": "arn:aws:s3:::data-pipeline-bucket/cicd-datapipeline/airflow-cicd-datapipeline.env",
+                    "type": "s3"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "airflow-logs",
+                    "containerPath": "/opt/airflow/logs",
+                    "readOnly": false
+                },
+                {
+                    "sourceVolume": "dbt-data",
+                    "containerPath": "/home/airflow/.dbt",
+                    "readOnly": false
+                }
+            ],
+            "volumesFrom": [],
+            "dependsOn": [
+                {
+                    "containerName": "redis",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "postgres",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "airflow-init",
+                    "condition": "COMPLETE"
+                }
+            ],
+            "workingDirectory": "/usr/local/airflow",
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/cicd-datapipeline-taskdef",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "curl --fail http://localhost:8080/health"
+                ],
+                "interval": 30,
+                "timeout": 10,
+                "retries": 5,
+                "startPeriod": 30
+            }
+        },
+        {
+            "name": "airflow-triggerer",
+            "image": "apache/airflow:2.6.1",
+            "cpu": 0,
+            "portMappings": [],
+            "essential": false,
+            "command": [
+                "triggerer"
+            ],
+            "environment": [],
+            "environmentFiles": [
+                {
+                    "value": "arn:aws:s3:::data-pipeline-bucket/cicd-datapipeline/airflow-cicd-datapipeline.env",
+                    "type": "s3"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "airflow-logs",
+                    "containerPath": "/opt/airflow/logs",
+                    "readOnly": false
+                },
+                {
+                    "sourceVolume": "dbt-data",
+                    "containerPath": "/home/airflow/.dbt",
+                    "readOnly": false
+                }
+            ],
+            "volumesFrom": [],
+            "dependsOn": [
+                {
+                    "containerName": "redis",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "postgres",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "airflow-init",
+                    "condition": "COMPLETE"
+                }
+            ],
+            "workingDirectory": "/usr/local/airflow",
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/cicd-datapipeline-taskdef",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "airflow jobs check --job-type TriggererJob --hostname \"$${HOSTNAME}\""
+                ],
+                "interval": 30,
+                "timeout": 10,
+                "retries": 5,
+                "startPeriod": 30
+            }
+        },
+        {
+            "name": "airflow-worker-1",
+            "image": "apache/airflow:2.6.1",
+            "cpu": 0,
+            "portMappings": [],
+            "essential": false,
+            "command": [
+                "celery",
+                "worker"
+            ],
+            "environment": [
+                {
+                    "name": "DUMB_INIT_SETSID",
+                    "value": "0"
+                }
+            ],
+            "environmentFiles": [
+                {
+                    "value": "arn:aws:s3:::data-pipeline-bucket/cicd-datapipeline/airflow-cicd-datapipeline.env",
+                    "type": "s3"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "airflow-logs",
+                    "containerPath": "/opt/airflow/logs",
+                    "readOnly": false
+                },
+                {
+                    "sourceVolume": "dbt-data",
+                    "containerPath": "/home/airflow/.dbt",
+                    "readOnly": false
+                }
+            ],
+            "volumesFrom": [],
+            "dependsOn": [
+                {
+                    "containerName": "redis",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "postgres",
+                    "condition": "HEALTHY"
+                },
+                {
+                    "containerName": "airflow-init",
+                    "condition": "COMPLETE"
+                }
+            ],
+            "workingDirectory": "/usr/local/airflow",
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/cicd-datapipeline-taskdef",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "celery --app airflow.executors.celery_executor.app inspect ping -d \"celery@$${HOSTNAME}\""
+                ],
+                "interval": 30,
+                "timeout": 10,
+                "retries": 5,
+                "startPeriod": 30
+            }
+        },
+        {
+            "name": "postgres",
+            "image": "postgres:13",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "postgres-5432-tcp",
+                    "containerPort": 5432,
+                    "hostPort": 5432,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": false,
+            "environment": [
+                {
+                    "name": "POSTGRES_USER",
+                    "value": "airflow"
+                },
+                {
+                    "name": "POSTGRES_PASSWORD",
+                    "value": "airflow"
+                },
+                {
+                    "name": "POSTGRES_DB",
+                    "value": "airflow"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "postgres-airflow-metadata",
+                    "containerPath": "/var/lib/postgresql/data",
+                    "readOnly": false
+                }
+            ],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/cicd-datapipeline-taskdef",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "pg_isready -U airflow"
+                ],
+                "interval": 12,
+                "timeout": 5,
+                "retries": 8,
+                "startPeriod": 5
+            }
+        },
+        {
+            "name": "redis",
+            "image": "redis:latest",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "redis-6379-tcp",
+                    "containerPort": 6379,
+                    "hostPort": 6379,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": false,
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/cicd-datapipeline-taskdef",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "redis-cli ping"
+                ],
+                "interval": 12,
+                "timeout": 20,
+                "retries": 10,
+                "startPeriod": 5
+            }
+        },
+        {
+            "name": "airflow-init",
+            "image": "apache/airflow:2.6.1",
+            "cpu": 0,
+            "portMappings": [],
+            "essential": false,
+            "entryPoint": [
+                "/bin/bash",
+                "-c"
+            ],
+            "command": [
+                "/bin/bash -c \"mkdir -p /sources/logs /sources/dags /sources/plugins && chown -R airflow:0 /sources/{logs,dags,plugins} && exec /entrypoint airflow version\""
+            ],
+            "environment": [
+                {
+                    "name": "_AIRFLOW_WWW_USER_PASSWORD",
+                    "value": "airflow"
+                },
+                {
+                    "name": "_AIRFLOW_DB_UPGRADE",
+                    "value": "true"
+                },
+                {
+                    "name": "_AIRFLOW_WWW_USER_CREATE",
+                    "value": "true"
+                },
+                {
+                    "name": "_AIRFLOW_WWW_USER_USERNAME",
+                    "value": "airflow"
+                }
+            ],
+            "environmentFiles": [
+                {
+                    "value": "arn:aws:s3:::data-pipeline-bucket/cicd-datapipeline/airflow-cicd-datapipeline.env",
+                    "type": "s3"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "airflow-logs",
+                    "containerPath": "/sources",
+                    "readOnly": false
+                }
+            ],
+            "volumesFrom": []
+        }
+    ],
+    "taskRoleArn": "arn:aws:iam::960161294915:role/ecsTaskRole",
+    "executionRoleArn": "arn:aws:iam::960161294915:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "volumes": [
+        {
+            "name": "postgres-db-volume",
+            "host": {}
+        },
+        {
+            "name": "airflow-logs",
+            "efsVolumeConfiguration": {
+                "fileSystemId": "fs-0aa961612bac7b7af",
+                "rootDirectory": "/"
+            }
+        },
+        {
+            "name": "dbt-data",
+            "efsVolumeConfiguration": {
+                "fileSystemId": "fs-0ae321dc99523a354",
+                "rootDirectory": "/"
+            }
+        },
+        {
+            "name": "postgres-airflow-metadata",
+            "efsVolumeConfiguration": {
+                "fileSystemId": "fs-08560b3d0f41e6e1d",
+                "rootDirectory": "/"
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "2048",
+    "memory": "8192",
+    "ephemeralStorage": {
+        "sizeInGiB": 50
+    },
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
+}

@@ -26,6 +26,7 @@ phases:
       - echo $REPOSITORY_IMAGES
       - echo Building the Docker images 
       - which docker
+      - whoami
       - docker build -t $REPOSITORY_URI:latest .
       - docker images
   post_build:
