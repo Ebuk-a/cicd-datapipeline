@@ -1,0 +1,41 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo Updating docker compose
+      - DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker} 
+      - mkdir -p $DOCKER_CONFIG/cli-plugins
+      - curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+      - chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+      - docker compose version
+    
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+      - aws --version
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REGISTRY_URI/$REPOSITORY
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-8)
+      - echo $IMAGE_TAG
+
+  build:
+    commands:
+      - echo checking ecr connectivity
+      - aws ecr list-images --repository-name $REPOSITORY
+      - REPOSITORY_IMAGES=$(aws ecr list-images --repository-name $REPOSITORY --max-items 1)
+      - echo $REPOSITORY_IMAGES
+      - echo Building the Docker images 
+      - which docker
+      - docker build -t $REGISTRY_URI/$REPOSITORY:latest
+      - docker images
+  post_build:
+    commands:
+      - echo tagging image
+      - docker tag $REGISTRY_URI/$REPOSITORY:latest $REGISTRY_URI/$REPOSITORY:$IMAGE_TAG
+      - echo pushing Docker image
+      - docker push $REGISTRY_URI/$REPOSITORY:latest
+      - docker push $REGISTRY_URI/$REPOSITORY:$IMAGE_TAG
+      - printf '[{"name":"cicd-datapipeline","imageUri":"%s"}]' $REGISTRY_URI/$REPOSITORY:latest > imagedefinitions.json
+artifacts:
+  files: 
+   - imagedefinitions.json
