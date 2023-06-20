@@ -19,6 +19,6 @@ RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r airflow-r
 # RUN source dbt_venv/bin/activate && pip3 install --no-cache-dir -r dbt-requirements.txt
 
 WORKDIR "/opt/airflow" 
-COPY orchestrate/* .
+COPY orchestrate/* ./dags
 
 
