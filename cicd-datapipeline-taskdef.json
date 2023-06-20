@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "airflow-scheduler",
-            "image": "apache/airflow:2.6.1",
+            "image": "960161294915.dkr.ecr.us-east-1.amazonaws.com/cicd-datapipeline:latest",
             "cpu": 0,
             "portMappings": [],
             "essential": false,
@@ -67,7 +67,7 @@
         },
         {
             "name": "airflow-webserver",
-            "image": "apache/airflow:2.6.1",
+            "image": "960161294915.dkr.ecr.us-east-1.amazonaws.com/cicd-datapipeline:latest",
             "cpu": 0,
             "portMappings": [
                 {
@@ -180,7 +180,7 @@
         },
         {
             "name": "airflow-triggerer",
-            "image": "apache/airflow:2.6.1",
+            "image": "960161294915.dkr.ecr.us-east-1.amazonaws.com/cicd-datapipeline:latest",
             "cpu": 0,
             "portMappings": [],
             "essential": false,
@@ -244,7 +244,7 @@
         },
         {
             "name": "airflow-worker-1",
-            "image": "apache/airflow:2.6.1",
+            "image": "960161294915.dkr.ecr.us-east-1.amazonaws.com/cicd-datapipeline:latest",
             "cpu": 0,
             "portMappings": [],
             "essential": false,
@@ -477,7 +477,7 @@
         {
             "name": "postgres-airflow-metadata",
             "efsVolumeConfiguration": {
-                "fileSystemId": "fs-08560b3d0f41e6e1d",
+                "fileSystemId": "fs-008534b870575666a",
                 "rootDirectory": "/"
             }
         }
