@@ -1,41 +1,42 @@
 # https://github.com/Ebuk-a modified from https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html 
 
 version: '3.8'
-x-airflow-common:
-  &airflow-common
-  # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.1}
-  # build: .
-  environment:
-    &airflow-common-env
-    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    # For backward compatibility, with Airflow <2.3
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
-    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
-    AIRFLOW__CORE__FERNET_KEY: ''
-    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
-    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
-  volumes:
-    - ./${AIRFLOW_PROJ_DIR:-orchestrate}/dags:/opt/airflow/dags
-    - ./${AIRFLOW_PROJ_DIR:-orchestrate}/logs:/opt/airflow/logs
-    - ./${AIRFLOW_PROJ_DIR:-orchestrate}/plugins:/opt/airflow/plugins
-    - ./${AIRFLOW_PROJ_DIR:-orchestrate}/config:/opt/airflow/
-    - ./transform-dbt:/usr/local/airflow/dbt:rw
-    - /usr/local/airflow/dbt/.dbt/     # Do not copy the 'profiles' subfolder from ./dbt (previous step) by creating an empty folder profiles/
-    - ./transform-dbt/.dbt:/home/airflow/.dbt
+# x-airflow-common:
+#   &airflow-common
+#   # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.1}
+#   # build: .
+#   environment:
+#     &airflow-common-env
+#     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+#     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+#     # For backward compatibility, with Airflow <2.3
+#     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+#     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+#     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
+#     AIRFLOW__CORE__FERNET_KEY: ''
+#     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+#     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+#     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
+#     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
+#     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+#   volumes:
+#     - ./${AIRFLOW_PROJ_DIR:-orchestrate}/dags:/opt/airflow/dags
+#     - ./${AIRFLOW_PROJ_DIR:-orchestrate}/logs:/opt/airflow/logs
+#     - ./${AIRFLOW_PROJ_DIR:-orchestrate}/plugins:/opt/airflow/plugins
+#     - ./${AIRFLOW_PROJ_DIR:-orchestrate}/config:/opt/airflow/
+#     - ./transform-dbt:/usr/local/airflow/dbt:rw
+#     - /usr/local/airflow/dbt/.dbt/     # Do not copy the 'profiles' subfolder from ./dbt (previous step) by creating an empty folder profiles/
+#     - ./transform-dbt/.dbt:/home/airflow/.dbt
 
-  user: "${AIRFLOW_UID:-50000}:0"
+#  user: "${AIRFLOW_UID:-50000}:0"
 
 
 services:
   airflow-webserver:
     build: 
       context: .
-    <<: *airflow-common
+    # <<: *airflow-common
+    user: "${AIRFLOW_UID:-50000}:0"
     command: webserver
     ports:
       - "8080:8080"
@@ -44,17 +45,17 @@ services:
   airflow-scheduler:
     build: 
       context: .
-    <<: *airflow-common
+    user: "${AIRFLOW_UID:-50000}:0"
     command: scheduler
     restart: always
 
   airflow-worker-1:
     build: 
       context: .
-    <<: *airflow-common
+    user: "${AIRFLOW_UID:-50000}:0"
     command: celery worker
     environment:
-      <<: *airflow-common-env
+      # <<: *airflow-common-env
       # Required to handle warm shutdown of the celery workers properly
       DUMB_INIT_SETSID: "0"
     restart: always
@@ -62,6 +63,6 @@ services:
   airflow-triggerer:
     build: 
       context: .
-    <<: *airflow-common
+    user: "${AIRFLOW_UID:-50000}:0"
     command: triggerer
     restart: always

@@ -16,10 +16,10 @@ The tools used
 4. Docker
 5. Codebuild and associated buildspec
 6. to host the imagedefinitions (output of the build stage, and the ENV file for the containers)
-7. Elastic Container Registry
+7. Elastic Container Registry to host the airflow image
 8. Code Pipeline and associated Task definition
-9. Elastic File System
-10. Elastic Load Balancer
+9. Elastic File System for Persistent storage
+10. Elastic Load Balancer for static endpoint
 11. Cloud watch for container log monitoring
 
 ## Related Works
