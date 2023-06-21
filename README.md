@@ -6,7 +6,7 @@
 ## Introduction: Continuous Delployment and Integration for Data pipeline
 This projects covers the setup and integration of Airflow with dbt, with git changes continuously integrated, built and deployed to ECS containers hosted on Fargate (serverless) through AWS Codebuild, ECR and Codpipeline. EFS is used to maintain storage persistence, and an ELB to ensure static endpoint. <br />
 ### Note:
-A more detailed post will be shared via Medium, explaining the required IAM accesses, roles and pictorial representions of the integration process.
+A more detailed post will be shared via Medium (with link here), explaining the required IAM accesses, roles and pictorial representions of the integration process.
 
 ## Technologies
 The tools used 
