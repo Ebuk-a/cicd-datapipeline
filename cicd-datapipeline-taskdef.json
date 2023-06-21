@@ -82,48 +82,7 @@
             "command": [
                 "webserver"
             ],
-            "environment": [
-                {
-                    "name": "AIRFLOW__CORE__SQL_ALCHEMY_CONN",
-                    "value": "postgresql+psycopg2://airflow:airflow@localhost:5432/airflow"
-                },
-                {
-                    "name": "AIRFLOW__CORE__LOAD_EXAMPLES",
-                    "value": "true"
-                },
-                {
-                    "name": "AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK",
-                    "value": "true"
-                },
-                {
-                    "name": "AIRFLOW__CORE__FERNET_KEY",
-                    "value": ""
-                },
-                {
-                    "name": "AIRFLOW__CORE__EXECUTOR",
-                    "value": "CeleryExecutor"
-                },
-                {
-                    "name": "AIRFLOW__CELERY__RESULT_BACKEND",
-                    "value": "db+postgresql://airflow:airflow@localhost:5432/airflow"
-                },
-                {
-                    "name": "AIRFLOW__CELERY__BROKER_URL",
-                    "value": "redis://:@localhost:6379/0"
-                },
-                {
-                    "name": "AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION",
-                    "value": "true"
-                },
-                {
-                    "name": "AIRFLOW__API__AUTH_BACKENDS",
-                    "value": "airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session"
-                },
-                {
-                    "name": "AIRFLOW__DATABASE__SQL_ALCHEMY_CONN",
-                    "value": "postgresql+psycopg2://airflow:airflow@localhost:5432/airflow"
-                }
-            ],
+            "environment": [],
             "environmentFiles": [
                 {
                     "value": "arn:aws:s3:::data-pipeline-bucket/cicd-datapipeline/airflow-cicd-datapipeline.env",
