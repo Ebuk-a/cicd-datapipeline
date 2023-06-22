@@ -1,2 +1,3 @@
 postbuild-logspermission.sh
-ecs-cli-conf.txt
+commands_and_configs.txt
+.DS_Store

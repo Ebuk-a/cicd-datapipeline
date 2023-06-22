@@ -1,4 +1,4 @@
-#Install all Cosmos(for dbt-airflow integration), dbt, and all of the supported database types (postgres, bigquery, redshift, snowflake)
+# astronomer-cosmos[dbt.all] installs all Cosmos(for dbt-airflow integration), dbt, and all of the supported database types (postgres, bigquery, redshift, snowflake)
 astronomer-cosmos[dbt.all]
 sqlalchemy-redshift
 redshift_connector

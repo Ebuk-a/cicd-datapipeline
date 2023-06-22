@@ -28,9 +28,9 @@ with DAG(
         task_id="jaffle_shop_install_deps",
         project_dir=f"/usr/local/airflow/dbt/jaffle_shop",
         schema="public",
-        #dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
+        # dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
         dbt_executable_path="/home/airflow/.local/bin/dbt",
-        conn_id="postgres_default",
+        conn_id="postgres",
     )
 
     with TaskGroup(group_id="drop_seeds_if_exist") as drop_seeds:
@@ -42,18 +42,18 @@ with DAG(
                     args={"table_name": seed},
                     project_dir=f"/usr/local/airflow/dbt/{project['project']}",
                     schema="public",
-                    #dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
+                    # dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
                     dbt_executable_path="/home/airflow/.local/bin/dbt",
-                    conn_id="postgres_default",
+                    conn_id="postgres",
                 )
 
     create_seeds = DbtSeedOperator(
         task_id=f"jaffle_shop_seed",
         project_dir=f"/usr/local/airflow/dbt/jaffle_shop",
         schema="public",
-        #dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
+        # dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
         dbt_executable_path="/home/airflow/.local/bin/dbt",
-        conn_id="postgres_default",
+        conn_id="postgres",
         outlets=[Dataset(f"SEED://JAFFLE_SHOP")],
      )
 
