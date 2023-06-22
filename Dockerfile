@@ -12,7 +12,7 @@ RUN python -m pip install --upgrade pip
 
 COPY requirements/* ./ 
 
-COPY dbt ./
+COPY dbt ./dbt
 
 RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r airflow-requirements.txt
 # RUN pip install --no-cache-dir -r airflow-requirements.txt
