@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r airflow-r
 # RUN pip install --no-cache-dir -r airflow-requirements.txt
 
 RUN id airflow
+RUN sudo chown -R /usr/local/airflow
 # Create a virtual env for dbt and install dbt requirements to avoid depency conflicts with airflow.
 RUN whoami && ls -la && python3 -m venv --system-site-packages dbt_venv
 
