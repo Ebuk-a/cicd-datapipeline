@@ -10,7 +10,8 @@ jaffle_shop = DbtDag(
     conn_id="postgres",
     dbt_args={
         "schema": "public",
-        "dbt_executable_path": "/usr/local/airflow/dbt_venv/bin/dbt",
+        # "dbt_executable_path": "/usr/local/airflow/dbt_venv/bin/dbt",
+        "dbt_executable_path":"/home/airflow/.local/bin/dbt",
         },
 )
 
