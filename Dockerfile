@@ -3,7 +3,7 @@ FROM apache/airflow:2.6.1
 WORKDIR "/usr/local/airflow"
 USER root
 RUN sudo apt-get -y update
-chown -R /usr/local/airflow
+RUN chown -R airflow:root /usr/local/airflow
 
 USER airflow
 
