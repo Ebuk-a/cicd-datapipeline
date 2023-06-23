@@ -14,7 +14,7 @@ DB_NAME = "postgres"
 SCHEMA_NAME = "public"
 DBT_PROJECT_NAME = "test_project"
 # the path where Cosmos will find the dbt executable (to find path,run: which dbt)
-DBT_EXECUTABLE_PATH = "/home/airflow/.local/bin/dbt",
+DBT_EXECUTABLE_PATH = "/home/airflow/.local/bin/dbt"
 # The path to your dbt root directory
 DBT_ROOT_PATH = "/usr/local/airflow/dbt"
 
@@ -24,7 +24,7 @@ DBT_ROOT_PATH = "/usr/local/airflow/dbt"
     schedule=None,
     catchup=False,
 )
-def jaffle_shop_dbt_dag():
+def test_project_dbt():
     DbtTaskGroup(
         group_id="transform",
         dbt_project_name=DBT_PROJECT_NAME,
@@ -34,8 +34,8 @@ def jaffle_shop_dbt_dag():
             "dbt_executable_path": DBT_EXECUTABLE_PATH,
             "schema": SCHEMA_NAME,
             "vars": '{"my_name": "ebuka"}',
-        },
+        }
     )
 
 
-jaffle_shop_dbt_dag()
+test_project_dbt()

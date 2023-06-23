@@ -19,6 +19,27 @@ clean-targets:
 
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
+
+sources:
+  - name: jaffle_shop
+    database: postgres  
+    schema: public  
+    tables:
+      - name: raw_orders_tb
+      - name: raw_customers_tb
+      - name: raw_payments_tb
+
+  # - name: stripe
+  #   tables:
+  #     - name: payments
+
+  # - name: dwh
+  #   database: bi
+  #   tables:
+  #     - name: customer
+  #     - name: customer_security
+
+
 models:
   jaffle_shop:
       materialized: table
