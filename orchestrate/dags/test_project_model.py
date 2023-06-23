@@ -12,7 +12,7 @@ from pendulum import datetime
 CONNECTION_ID = "postgres"
 DB_NAME = "postgres"
 SCHEMA_NAME = "public"
-DBT_PROJECT_NAME = "jaffle_shop"
+DBT_PROJECT_NAME = "test_project"
 # the path where Cosmos will find the dbt executable (to find path,run: which dbt)
 DBT_EXECUTABLE_PATH = "/home/airflow/.local/bin/dbt",
 # The path to your dbt root directory
@@ -24,9 +24,9 @@ DBT_ROOT_PATH = "/usr/local/airflow/dbt"
     schedule=None,
     catchup=False,
 )
-def simple_dbt_dag():
+def jaffle_shop_dbt_dag():
     DbtTaskGroup(
-        group_id="transform_data",
+        group_id="transform",
         dbt_project_name=DBT_PROJECT_NAME,
         conn_id=CONNECTION_ID,
         dbt_root_path=DBT_ROOT_PATH,
@@ -38,4 +38,4 @@ def simple_dbt_dag():
     )
 
 
-simple_dbt_dag()
+jaffle_shop_dbt_dag()

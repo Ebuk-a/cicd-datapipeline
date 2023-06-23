@@ -1,3 +1,6 @@
 postbuild-logspermission.sh
 commands_and_configs.txt
 .DS_Store
+orchestrate/config
+orchestrate/logs
+__pycache__/

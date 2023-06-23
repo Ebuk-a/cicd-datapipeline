@@ -6,7 +6,7 @@ from cosmos.providers.dbt.task_group import DbtTaskGroup
 
 with DAG(
     dag_id="extract_dag",
-    start_date=datetime(2022, 11, 27),
+    start_date=datetime(2023, 6, 20),
     schedule="@daily",
     catchup= False
 ) as dag:
