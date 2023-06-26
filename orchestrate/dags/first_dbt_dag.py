@@ -16,7 +16,7 @@ with DAG(
     dbt_tg = DbtTaskGroup(
         group_id="dbt_tg",
         dbt_project_name="jaffle_shop",
-        conn_id="airflow_db",
+        conn_id="postgres",
         dbt_args={
             "schema": "public",
         },

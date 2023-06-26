@@ -72,8 +72,10 @@ services:
     container_name: airflow-webserver
     <<: *airflow-common
     command: webserver
+    #8080 for airflow webserver; 8001 for dbt doc generate webui
     ports:
       - "8080:8080"
+      - "8001:8001"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
