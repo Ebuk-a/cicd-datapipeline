@@ -1,10 +1,10 @@
 with source as (
-
+    
     {#-
     Normally we would select from the table here, but we are using seeds to load
     our data in this project
     #}
-    select * from {{ source('postgres_public_dw', 'raw_customers_tb') }}
+    select * from {{ source('postgres_public_dw', 'raw_constructors') }}
     
 
 ),
@@ -12,9 +12,11 @@ with source as (
 renamed as (
 
     select
-        id as customer_id,
-        first_name,
-        last_name
+        "constructor_id", 
+        "url", 
+        "name" as "constructor_name", 
+        "nationality", 
+        "_etl_loaded_at"
 
     from source
 

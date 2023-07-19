@@ -4,3 +4,4 @@ commands_and_configs.txt
 orchestrate/config
 orchestrate/logs
 __pycache__/
+test.ipynb

@@ -1,10 +1,34 @@
 version: 2
 
 sources:
-  - name: postgres
+  - name: postgres_public_dw
     description: This is the Postgres database contaning the raw data
     database: postgres  
     schema: public  
+    tables:
+      - name: raw_orders_tb
+        description: The raw orders table
+        columns:
+            - name: id
+              description: Primary key of the orders table
+              tests:
+                - unique
+                - not_null
+
+      - name: raw_customers_tb
+        description: The raw customers table
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
+      - name: raw_payments_tb
+
+  - name: postgres_staging
+    description: This is the Postgres database contaning the raw data
+    database: postgres  
+    schema: staging  
     tables:
       - name: raw_orders_tb
         description: The raw orders table

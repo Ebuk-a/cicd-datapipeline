@@ -1,0 +1,60 @@
+version: 2
+
+sources:
+  - name: postgres_public_dw
+    description: This is the Postgres database contaning the raw data
+    database: dw  
+    schema: public  
+    tables:
+      - name: raw_races_result
+        description: The raw race table
+        columns:
+            - name: driver_id
+              description: Primary key of the race_result table
+              tests:
+                - not_null
+
+      - name: raw_constructors
+        description: The raw constructor table
+        columns:
+          - name: constructor_id
+            description: Primary key of the raw constructor table
+            tests:
+              - unique
+              - not_null
+
+      - name: raw_schedules
+        description: The raw schedules table
+        columns:
+          - name: datetime
+            description: Unique date for each race schedule on the schedules table
+            tests:
+              - unique
+              - not_null
+
+      - name: raw_seasons
+        description: The raw seasons table
+        columns:
+          - name: season
+            description: Year for each season
+            tests:
+              - unique
+              - not_null
+
+      - name: raw_drivers
+        description: The raw drivers table
+        columns:
+          - name: driver_id
+            description: Primary key of the raw drivers table
+            tests:
+              - unique
+              - not_null
+
+      - name: raw_circuits
+        description: The raw circuits table
+        columns:
+          - name: circuit_id
+            description: Primary key of the raw drivers table
+            tests:
+              - unique
+              - not_null

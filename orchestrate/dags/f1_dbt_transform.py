@@ -2,10 +2,10 @@ from airflow.decorators import dag
 from cosmos.providers.dbt.task_group import DbtTaskGroup
 from pendulum import datetime
 
-CONNECTION_ID = "postgres_aws"
+CONNECTION_ID = "postgres_default"
 DB_NAME = "postgres"
 SCHEMA_NAME = "public"
-DBT_PROJECT_NAME = "jaffle_shop_seed"
+DBT_PROJECT_NAME = "f1_race"
 # the path where Cosmos will find the dbt executable (to find path,run: which dbt)
 DBT_EXECUTABLE_PATH = "/home/airflow/.local/bin/dbt"
 # The path to your dbt root directory
@@ -17,7 +17,7 @@ DBT_ROOT_PATH = "/usr/local/airflow/dbt"
     schedule=None,
     catchup=False,
 )
-def jaffle_shop_seed_dbt():
+def f1_dbt_transform():
     DbtTaskGroup(
         group_id="transform_data",
         dbt_project_name=DBT_PROJECT_NAME,
@@ -29,6 +29,7 @@ def jaffle_shop_seed_dbt():
             "vars": '{"my_name": "ebuka"}',
         },
     )
+transform = f1_dbt_transform()
 
+transform 
 
-jaffle_shop_seed_dbt()

@@ -1,10 +1,3 @@
-"""
-### Run a dbt Core project as a task group with Cosmos
-
-Simple DAG showing how to run a dbt project as a task group, using
-an Airflow connection and injecting a variable into the dbt project.
-"""
-
 from airflow.decorators import dag
 from cosmos.providers.dbt.task_group import DbtTaskGroup
 from pendulum import datetime
