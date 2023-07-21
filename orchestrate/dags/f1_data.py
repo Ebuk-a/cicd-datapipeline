@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.decorators import dag, task
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from cosmos.providers.dbt.task_group import DbtTaskGroup
+from cosmos.task_group import DbtTaskGroup
 
 from pandas import json_normalize
 from datetime import datetime
