@@ -8,13 +8,13 @@ with races as (
 final as (
 
     select "driver_id",  
-            sum("points") as "total_points" 
+            sum("points") as "total_pointss" 
             
     from races
 
     group by "driver_id"
 
-    order by "total_points" desc 
+    order by "total_pointss" desc 
 
 )
 
