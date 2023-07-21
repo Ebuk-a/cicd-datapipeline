@@ -23,7 +23,7 @@ def _process_user(ti):
     processed_user.to_csv('/tmp/processed_user.csv', index=None, header= False)
 
 def _store_user():
-    hook = PostgresHook(conn_id= 'postgres_localhost')
+    hook = PostgresHook(conn_id= 'postgres_default')
     hook.copy_expert(
         sql= "COPY users from stdin WITH DELIMITER as ','",
         filename= '/tmp/processed_user.csv'
@@ -34,7 +34,7 @@ with DAG('users_processing', start_date= datetime(2023,1,1),
     
     create_table= PostgresOperator(
         task_id='create_table',
-        postgres_conn_id = "postgres_localhost",
+        postgres_conn_id = "postgres_default",
         sql= '''
         CREATE TABLE IF NOT EXISTS users (
         firstname TEXT NOT NULL,
