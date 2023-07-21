@@ -2,6 +2,7 @@ version: 2
 
 models:
   - name: stg_customers
+    description: The primary key for customers.
     columns:
       - name: customer_id
         tests:
@@ -11,13 +12,21 @@ models:
   - name: stg_orders
     columns:
       - name: order_id
+        description: Primary key for orders.
         tests:
           - unique
           - not_null
       - name: status
+        description: '{{ doc("order_status") }}'
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: customer_id
+        description: Foreign key to stg_customers.customer_id.
+        tests:
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
 
   - name: stg_payments
     columns:

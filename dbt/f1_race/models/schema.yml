@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: driver_points
+    description: This table shows the aggregated points for each driver across all seasons.
+
+    columns:
+      - name: driver_id
+        description: This is a unique identifier for a customer
+        tests:
+          - unique
+          - not_null
+
+      - name: total_points
+        description: Total points

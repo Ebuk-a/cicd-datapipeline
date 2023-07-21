@@ -1,9 +1,9 @@
-name: 'jaffle_shop'
+name: 'jaffle_shop_db'
 
 config-version: 2
 version: '0.1'
 
-profile: 'jaffle_shop'
+profile: 'jaffle_shop_db'
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
@@ -19,8 +19,12 @@ clean-targets:
 
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
+
 models:
-  jaffle_shop:
+  jaffle_shop_db:
       materialized: table
       staging:
         materialized: view
+
+vars:
+    owner: "Ebuka"
