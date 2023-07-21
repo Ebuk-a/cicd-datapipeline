@@ -1,5 +1,6 @@
-# astronomer-cosmos[dbt.all] installs all Cosmos(for dbt-airflow integration), dbt, and all of the supported database types (postgres, bigquery, redshift, snowflake)
-astronomer-cosmos[dbt.all]
+# astronomer-cosmos[dbt.all] installs all Cosmos(for dbt-airflow integration), dbt, and all of the supported database types (postgres, bigquery, redshift, snowflake
+# https://github.com/astronomer/astronomer-cosmos/releases
+astronomer-cosmos[dbt.all]==0.7.5
 sqlalchemy-redshift
 redshift_connector
 pendulum
