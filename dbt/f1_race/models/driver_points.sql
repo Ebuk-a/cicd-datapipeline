@@ -14,7 +14,7 @@ final as (
 
     group by "driver_id"
 
-    order by "total_pointss" desc 
+    order by "total_pointsss" desc 
 
 )
 
