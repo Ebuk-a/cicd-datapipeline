@@ -1,5 +1,5 @@
 from airflow.decorators import dag
-from cosmos.providers.dbt.task_group import DbtTaskGroup
+from cosmos.task_group import DbtTaskGroup
 from pendulum import datetime
 
 CONNECTION_ID = "postgres_aws"

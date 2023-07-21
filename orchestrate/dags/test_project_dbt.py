@@ -6,7 +6,7 @@ an Airflow connection and injecting a variable into the dbt project.
 """
 
 from airflow.decorators import dag
-from cosmos.providers.dbt.task_group import DbtTaskGroup
+from cosmos.task_group import DbtTaskGroup
 from pendulum import datetime
 
 CONNECTION_ID = "postgres"

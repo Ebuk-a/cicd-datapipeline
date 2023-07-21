@@ -2,7 +2,7 @@ from pendulum import datetime
 
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
-from cosmos.providers.dbt.task_group import DbtTaskGroup
+from cosmos.task_group import DbtTaskGroup
 
 with DAG(
     dag_id="extract_dag",
