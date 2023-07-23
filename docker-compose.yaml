@@ -37,8 +37,10 @@ services:
       context: .
     <<: *airflow-common
     command: webserver
+    #8080 for airflow webserver; 8001 for dbt doc generate webui
     ports:
       - "8080:8080"
+      - "8081:8081"
     restart: always
 
   airflow-scheduler:
