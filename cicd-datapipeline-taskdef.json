@@ -436,7 +436,7 @@
         {
             "name": "postgres-airflow-metadata",
             "efsVolumeConfiguration": {
-                "fileSystemId": "fs-008534b870575666a",
+                "fileSystemId": "fs-02d43bcf8728a4e54",
                 "rootDirectory": "/"
             }
         }
