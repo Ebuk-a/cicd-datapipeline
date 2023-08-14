@@ -8,7 +8,7 @@ This projects covers the setup and integration of Airflow with dbt, with git cha
 ### Note:
 A more detailed post will be shared via Medium (with link here), explaining the required IAM accesses, roles and pictorial representions of the integration process.
 
-## Technologies
+## Technologies 
 The tools used 
 1. Airflow
 2. dbt
