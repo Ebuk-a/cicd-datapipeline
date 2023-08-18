@@ -34,7 +34,7 @@ phases:
       - echo pushing Docker image
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"cicd-datapipeline","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - printf '[{"name":"airflow-scheduler","imageUri":"%s"}, {"name":"airflow-webserver","imageUri":"%s"}, {"name":"airflow-triggerer","imageUri":"%s"}, {"name":"airflow-worker-1","imageUri":"%s"}]' $REPOSITORY_URI:latest $REPOSITORY_URI:latest $REPOSITORY_URI:latest $REPOSITORY_URI:latest  > imagedefinitions.json
       - aws s3 cp ".env" "s3://data-pipeline-bucket/cicd-datapipeline/airflow-cicd-datapipeline.env"
 artifacts:
   files: 
